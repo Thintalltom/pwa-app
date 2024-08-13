@@ -1,14 +1,14 @@
 import React from 'react'
 import { User,  initialUser} from '../types/types'
 import { useState } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 const Signup = () => {
 const [user, setUser] = useState<User>(initialUser)
 const [data, setData] = useState([])
 const handleUser = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({...user, [e.target.name]: e.target.value})
 }  
-
+const navigate = useNavigate()
 const [toggle, setToggle] = useState(false)
 
 const handleData = (e: React.FormEvent<HTMLFormElement>) => {
@@ -17,8 +17,9 @@ const handleData = (e: React.FormEvent<HTMLFormElement>) => {
    
     localStorage.setItem('password', user.password)
     localStorage.setItem('email', user.email)
+    navigate('/login')
 };
-console.log(data)
+
 
 const toggleHandler = () =>
 {
