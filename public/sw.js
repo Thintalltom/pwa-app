@@ -10,7 +10,8 @@ this.addEventListener('install', (event) => {
                 'index.html',
                 '/',
                 '/mainpage',
-                '/login'
+                '/login',
+                '/post'
             ]);
         })
     );
@@ -26,17 +27,14 @@ this.addEventListener('fetch', (event) => {
     if (url.some(url => event.request.url.includes(url))) { 
         //actually check if the some of the api in url are present 
         event.respondWith(
-            caches.open(cacheData).then((cache) => {
-                return fetch(event.request)
-                    .then((response) => {
-                        cache.put(event.request, response.clone());
-                        //put the response here and return
-                        return response;
-                    })
-                    .catch(() => {
-                        // Return the cached response if fetch fails
-                        return caches.match(event.request);
-                    });
+            caches.open(cacheData).then(async (cache) => {
+                try {
+                    const response = await fetch(event.request);
+                    cache.put(event.request, response.clone());
+                    return response;
+                } catch {
+                    return await caches.match(event.request);
+                }
             })
         );
     } else if (!navigator.onLine) {
